@@ -11,6 +11,7 @@ const bs = require("browser-sync").create();
 const rimraf = require("rimraf");
 const gm = require("gulp-gm");
 const comments = require("gulp-header-comment");
+const jsonminify = require("gulp-jsonminify");
 
 var path = {
   src: {
@@ -25,6 +26,7 @@ var path = {
     blur: "source/images/**/*.+(jpg|jpeg|webp)",
     fonts: "source/fonts/**/*.+(eot|ttf|woff|woff2|otf)",
     static: "source/static/**/*",
+    manifest: "source/images/**/*.webmanifest",
   },
   build: {
     // build paths
@@ -139,6 +141,19 @@ gulp.task("images", function () {
     );
 });
 
+// Web Manifest
+gulp.task("manifest", function () {
+  return gulp
+    .src(path.src.manifest)
+    .pipe(jsonminify()) // safe for .webmanifest
+    .pipe(gulp.dest(path.build.dir))
+    .pipe(
+      bs.reload({
+        stream: true,
+      })
+    );
+});
+
 // fonts
 gulp.task("fonts", function () {
   return gulp
@@ -182,6 +197,7 @@ gulp.task("watch", function () {
   gulp.watch(path.src.images, gulp.series("images"));
   gulp.watch(path.src.fonts, gulp.series("fonts"));
   gulp.watch(path.src.plugins, gulp.series("plugins"));
+  gulp.watch(path.src.manifest, gulp.series("manifest"));
 });
 
 // dev Task
@@ -196,6 +212,7 @@ gulp.task(
     "fonts",
     "plugins",
     "static",
+    "manifest",
     gulp.parallel("watch", function () {
       bs.init({
         server: {
@@ -217,7 +234,8 @@ gulp.task(
     "images",
     "fonts",
     "plugins",
-    "static"
+    "static",
+    "manifest",
   )
 );
 
@@ -234,12 +252,13 @@ gulp.task(
     "images-blur",
     "fonts",
     "plugins",
-    "static"
+    "static",
+    "manifest"
   )
 );
 
 // Deploy Task
 gulp.task(
   "deploy",
-  gulp.series("html", "js", "scss", "images", "fonts", "plugins", "static")
+  gulp.series("html", "js", "scss", "images", "fonts", "plugins", "static","manifest")
 );

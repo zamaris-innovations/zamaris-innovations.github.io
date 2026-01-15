@@ -1,10 +1,10 @@
 {
-  "name": "bingo",
+  "name": "zamarisinnovations",
   "version": "1.0.0",
-  "description": "bingo free business template",
-  "author": "Themefisher",
+  "description": "",
+  "author": "zamaris",
   "license": "MIT",
-   "scripts": {
+  "scripts": {
     "dev": "gulp",
     "build": "gulp build",
     "download": "gulp download",
@@ -25,5 +25,8 @@
     "jshint": "^2.13.6",
     "jshint-stylish": "^2.2.1",
     "sass": "^1.54.0"
+  },
+  "devDependencies": {
+    "gulp-jsonminify": "^1.1.0"
   }
 }
